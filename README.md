@@ -33,7 +33,8 @@
         ),
     ),
 ```
-21. On the file `/etc/simplesamlphp/config-metarefresh.php` replace the config array inside with the following code:
+
+23. On the file `/etc/simplesamlphp/config-metarefresh.php` replace the config array inside with the following code:
 ```
 $config = array(
         'sets' => array(
@@ -53,12 +54,14 @@ $config = array(
         ),
 );
 ```
-22. Access simplesamlphp from your browser (e.x. `https://helpdesk-devel.uoa.gr/simplesamlphp`), go to the "Federation" tab and bellow "Tools", click on "Metarefresh: fetch metadata". You will be asked to give the admin password. You can find this password inside the file `/var/lib/simplesamlphp/secrets.inc.php`. After giving the password, you should see a screen with the following message:
+24. Access simplesamlphp from your browser (e.x. `https://helpdesk-devel.uoa.gr/simplesamlphp`), go to the "Federation" tab and bellow "Tools", click on "Metarefresh: fetch metadata". You will be asked to give the admin password. You can find this password inside the file `/var/lib/simplesamlphp/secrets.inc.php`. After giving the password, you should see a screen with the following message:
 ```
 16:20:11.418Z [metarefresh]: Executing set [grnet]
 16:20:11.421Z [metarefresh]: In set [grnet] loading source [https://md.aai.grnet.gr/aggregates/grnet-metadata.xml]
 16:20:12.166Z Writing: /usr/share/simplesamlphp/config/metadata/metadata-identity/saml20-idp-remote.php
 ```
 If you see anything else, something is wrong with the installation.
-23. Open the file `/etc/crontab` and at the botom of the file add the following line of code: `01 * * * * root curl --silent "https://helpdesk-devel.uoa.gr/simplesamlphp/module.php/cron/cron.php?key=veryverysecret...&tag=hourly" > /dev/null 2>&1 < /dev/null`
-24. You should now be able to login using SAML as a User from `https://helpdesk-devel.uoa.gr/osticket` and as Staff from `https://helpdesk-devel.uoa.gr/osticket/scp`
+
+25. Open the file `/etc/crontab` and at the botom of the file add the following line of code: `01 * * * * root curl --silent "https://helpdesk-devel.uoa.gr/simplesamlphp/module.php/cron/cron.php?key=veryverysecret...&tag=hourly" > /dev/null 2>&1 < /dev/null`
+
+26. You should now be able to login using SAML as a User from `https://helpdesk-devel.uoa.gr/osticket` and as Staff from `https://helpdesk-devel.uoa.gr/osticket/scp`
