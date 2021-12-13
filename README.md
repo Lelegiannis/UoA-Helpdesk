@@ -1,3 +1,4 @@
+# Deployment
 1. Download osTicket version 1.15.4 and extract it in a directory of your choice inside your system. This documentation is going to use `$OSTFILES` to refer to the path to this directory. Be sure to include the greek language plugin in your osTicket download.
 2. Download the saml plugin for osTicket and extract it in a directory of your choice inside your system. This documentation is going to use `$SSPFILES` to refer to the path to this directory.
 3. Inside `$SSPFILES` replace `hooks.php` and `saml.php` with the same named files inside `saml-ssp-updates` on this project.
@@ -65,3 +66,10 @@ If you see anything else, something is wrong with the installation.
 25. Open the file `/etc/crontab` and at the botom of the file add the following line of code: `01 * * * * root curl --silent "https://helpdesk-devel.uoa.gr/simplesamlphp/module.php/cron/cron.php?key=veryverysecret...&tag=hourly" > /dev/null 2>&1 < /dev/null`
 
 26. You should now be able to login using SAML as a User from `https://helpdesk-devel.uoa.gr/osticket` and as Staff from `https://helpdesk-devel.uoa.gr/osticket/scp`
+
+# Registering your simplesamlphp Service Provider with your Identity Provider
+To register a Service Provider, your Identity Provider is going to need:
+1. The metadata of your Service Provider
+2. The certificate of your Service Provider (to trust it)
+The certificate is the same you used on deployment step 22.
+To get the metadata, access simplesamlphp from your browser (e.x. `https://helpdesk-devel.uoa.gr/simplesamlphp`) and go to the "Federation" tab. You should see the name of your SP (see "name" in the code of step 22) with bold letters (e.x. "UoA OSTicket") and bellow it a link with the text "Show Metadata". To get the metadata, just click on that link.
