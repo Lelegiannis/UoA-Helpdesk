@@ -14,29 +14,39 @@
 ////////////////////
 
 function hook_ssp_manipulate_saml_atributes_before_mapping($config, $attrs) {
-
+    $principal = $attrs['urn:oid:1.3.6.1.4.1.5923.1.1.1.6'];
     $entitlementURNs = $attrs['urn:oid:1.3.6.1.4.1.5923.1.1.1.7'];
-
-    syslog(LOG_ERR,'##### EntitlementURNs: '.var_export($entitlementURNs,true));
     if(empty($entitlementURNs)){
         syslog(LOG_NOTICE,"User with principal '".$principal."' logged in, but does not have any entitlements on object");
         access_error();
         exit();
     }
 
-    $attrs['role'] = array();
+    //User primary department is set to be the department with department ID 1
     $attrs['department'] = array(1);
-    $mailAttr = $config->get('saml-ssp-attr-mapping-mail');
-    $attrs[$mailAttr] = array('sdi1200090+ostHookTest@di.uoa.gr');
 
+    //Set user email using the email attribute
+    $mailAttr = $config->get('saml-ssp-attr-mapping-mail');
+    $samlMails = $attrs[$mailAttr];
+    if($samlMails == NULL || empty($samlMails)){
+	syslog(LOG_ERROR,"User with principal '".$principal."' logged in successfully, but does not have any emails on object");
+	access_error();
+	exit();
+    }else if(is_array($samlMails)){
+	$attrs[$mailAttr] = array($samlMails[0]);
+    }else{
+	$attrs[$mailAttr] = array($samlMails);
+    }
+
+    //Set user primary role from the entitlement attribute
+    $attrs['role'] = array();
     foreach($entitlementURNs as $entitlementURN){
 	if(str_starts_with($entitlementURN,'urn:mace:gunet.gr:ediplomas.gr:helpdesk')){
             $entitlementFields = explode(":",$entitlementURN);
             $rights = $entitlementFields[6];
 
-	    syslog(LOG_ERR,'##### Rights: '.var_export($rights,true));
-            $roleQuery = "SELECT id FROM ".ROLE_TABLE." WHERE name LIKE '".$rights."'";
-            $roleQueryRes = db_result(db_query($roleQuery));
+	    $roleQuery = "SELECT id FROM ".ROLE_TABLE." WHERE name LIKE '".$rights."'";
+	    $roleQueryRes = db_result(db_query($roleQuery));
             if($roleQueryRes == NULL){
                 syslog(LOG_ERR,"Faulty rights on entitlement '".$entitlementURN."'");
                 access_error();
