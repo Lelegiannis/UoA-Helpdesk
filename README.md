@@ -2,7 +2,7 @@
 1. Download osTicket version 1.15.4 and extract it in a directory of your choice inside your system. This documentation is going to use `$OSTFILES` to refer to the path to this directory. Be sure to include the greek language plugin in your osTicket download.
 2. Download the saml plugin for osTicket and extract it in a directory of your choice inside your system. This documentation is going to use `$SSPFILES` to refer to the path to this directory.
 3. Inside `$SSPFILES` replace `hooks.php` and `saml.php` with the same named files inside `saml-ssp-updates` on this project.
-4. Install the `apache2`, `php`, `libapache2-mod-php`, `mariadb-server`, `php-mysql`, `php-dom` and `simplesamlphp` packages.
+4. Install the `curl`, `apache2`, `php`, `libapache2-mod-php`, `mariadb-server`, `php-mysql`, `php-dom` and `simplesamlphp` packages.
 5. On `/etc/apache2/sites-enabled/` replace the contents of `000-default.conf` file with the contents of `/etc/apache2/sites-available/default-ssl.conf` and replace the certificate filepaths inside with paths to the certificates for your osTicket.
 6. Enable simplesamlphp (`a2enconf simplesamlphp`, `systemctl reload apache2`) and ssl (`a2emod ssl`, `systemctl restard apache2`) on apache server and check if you can access the server from your browser through https using the correct domain name (e.x. `https://helpdesk-devel.uoa.gr`). If everything up to this point was done correctly, you should see the Apache2 Default Page on your browser.
 7. Create a new mysql database (`CREATE DATABASE osticket;`) and a new user that  osTicket will use to access the database (`CREATE USER 'osticket'@'localhost' IDENTIFIED BY 'yourPassword';` `GRANT ALL PRIVILEGES ON osticket.* TO 'osticket'@'localhost';`)
